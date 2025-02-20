@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   masterSrd= inject(MasterService)
 
   ngOnInit(): void {
-    this.masterSrd.getDashbvaordData().subscribe((Res:any)=>{
+    this.masterSrd.getDashboardData().subscribe((Res:any)=>{
       this.dashboardData =  Res;
     })
   }

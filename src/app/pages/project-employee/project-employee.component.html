@@ -27,7 +27,7 @@
                                 <td>{{item.role}}</td>
                                
                                 <td>
-                                    <button type="button" class="btn btn-primary mt-3" (click)="onUpdate(item.empProjectId)" >Edit</button>
+                                    <button type="button" class="btn btn-primary mt-3" (click)="onUpdate(item)" >Edit</button>
                                     <button type="button" class="btn btn-danger mt-3" (click)="onDelete(item.empProjectId)" >Delete</button>
                                 </td>
                             </tr>
@@ -41,7 +41,7 @@
     <div class="col-4">
          <div class="card">
             <div class="card-header bg-warning">
-                <h5>Add New Project Employee</h5>
+                <h5>{{isEditMode ? 'Edit' : 'Add'}} Project Employee</h5>
             </div>
             <div class="card-body">
                 <form class="mb-4" [formGroup]="form">
@@ -81,7 +81,8 @@
                             <input type="checkbox"  formControlName="isActive" id="roleProjectEmployee" placeholder="Enter role">
                         </div>
                     </div>
-                    <button type="button" (click)="onSave()" class="btn btn-primary mt-3 mx-2">Submit</button>
+                    <button type="button" (click)="onSave()" class="btn btn-primary mt-3 mx-2">{{isEditMode ? 'Update' : 'Submit'}}</button>
+                    <button type="button" (click)="onCancel()" class="btn btn-secondary mt-3 mx-2" *ngIf="isEditMode">Cancel</button>
                 </form>
             </div>
         </div>

@@ -1,19 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
 
   loginObj: any = {
-    username:'',
+    usernameOrEmail:'',
     password:''
   };
 
@@ -21,17 +22,14 @@ export class LoginComponent {
   http=inject(HttpClient);
 
   onLogin() {
-    this.http.post("http://localhost:8085/user/authenticate", this.loginObj)
+    this.http.post("http://localhost:8085/auth/login", this.loginObj)
       .subscribe({
         next: (res: any) => {
-         alert("accessToken="+res.accessToken)
-         alert("userName="+this.loginObj.username)
-
-          alert(JSON.stringify(res));  // Stringify to prevent object display issues
+        //  alert(JSON.stringify(res));  // Stringify to prevent object display issues
           
           if (!res.result) {
             alert("Login successful!");
-            localStorage.setItem("angular18Login", this.loginObj.username);
+            localStorage.setItem("AccessToken", res.accessToken);
             this.router.navigateByUrl('dashboard');
           } else {
             alert(res.message || "Wrong credentials.");

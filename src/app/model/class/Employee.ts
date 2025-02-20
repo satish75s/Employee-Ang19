@@ -4,6 +4,7 @@ export class Employee {
     contactNo: string;
     emailId: string;
     deptId: number;
+    subDeptId: number;
     password: string;
     gender: string;
     role: string;
@@ -12,6 +13,7 @@ export class Employee {
         this.contactNo = '';
         this.employeeId = 0;
         this.deptId = 0;
+        this.subDeptId = 0;
         this.emailId= '';
         this.employeeName= '';
         this.gender = '';

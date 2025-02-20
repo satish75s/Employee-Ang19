@@ -9,19 +9,10 @@ import cors from "cors";
   providedIn: 'root'
 })
 
-
-
-
 export class MasterService {
-
-
-
- // apiUrl: string = 'https://projectapi.gerasim.in/api/EmployeeManagement/';
  apiUrl: string = 'http://localhost:8080/';
-
+ apiRegUrl: string = "http://localhost:8085/auth/register";
   constructor(private http: HttpClient) { }
-
-
   getAllDept(): Observable<IApiResponse> {
     return this.http.get<IApiResponse>(this.apiUrl + "department");
   }
@@ -45,7 +36,17 @@ export class MasterService {
 
   deleteEmpById(id: number): Observable<IApiResponse> {
     debugger;
-    return this.http.delete<IApiResponse>(this.apiUrl + "DeleteEmployee/" +id);
+    return this.http.delete<IApiResponse>(this.apiUrl + "emp/" +id);
+  }
+
+  deleteProjById(id: number): Observable<IApiResponse> {
+    debugger;
+    return this.http.delete<IApiResponse>(this.apiUrl + "project/" +id);
+  }
+
+  deleteProjectEmpMapById(id: number): Observable<IApiResponse> {
+    debugger;
+    return this.http.delete<IApiResponse>(this.apiUrl + "project-emp-map/" +id);
   }
 
   saveProject(obj: Employee): Observable<IProject> {
@@ -73,13 +74,18 @@ export class MasterService {
     debugger;
     return this.http.post<IProject>(this.apiUrl + "project-emp-map", obj);
   } 
-  updateProjectEmp(obj: IProjectEmployee): Observable<IProjectEmployee> {
+ /* updateProjectEmp(obj: IProjectEmployee): Observable<IProjectEmployee> {
     debugger;
     return this.http.put<IProjectEmployee>(this.apiUrl + "project-emp-map?empProjectId="+obj.empProjectId, obj);
+  }*/
+
+  getDashboardData(): Observable<any> {
+    return this.http.get<any>(this.apiUrl + "project-emp-map/GetDashboard");
   }
 
-  getDashbvaordData(): Observable<any> {
-    return this.http.get<any>(this.apiUrl + "project-emp-map/GetDashboard");
+  registerNewUser(registerData: any): Observable<string> {
+   
+    return this.http.post<string>(this.apiRegUrl, registerData, { responseType: 'text' as 'json' });
   }
 
  

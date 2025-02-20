@@ -1,16 +1,16 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { IProject, IProjectEmployee } from '../../model/interface/master';
+import { IApiResponse, IProject, IProjectEmployee } from '../../model/interface/master';
 import { MasterService } from '../../service/master.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Employee } from '../../model/class/Employee';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-project-employee',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule,AsyncPipe],
+  imports: [ReactiveFormsModule,AsyncPipe,CommonModule],
   templateUrl: './project-employee.component.html',
   styleUrl: './project-employee.component.css'
 })
@@ -21,7 +21,8 @@ export class ProjectEmployeeComponent implements OnInit {
   form: FormGroup = new FormGroup({})
   projectList$ : Observable<IProject[]> = new Observable<IProject[]>;
   EmpList$ : Observable<Employee[]> = new Observable<Employee[]>;
-
+  chageDetection: any;
+  isEditMode = false; // Track if the form is in edit mode
   constructor() {
     this.initializeForm();
     this.projectList$ = this.masterSrv.getAllProjects();
@@ -43,17 +44,38 @@ export class ProjectEmployeeComponent implements OnInit {
     })
   }
 
-  onDelete(empProjectId:number){
-    alert("Employee Project to be deleted") 
-     const isDelete = confirm("Are you sure want ot Delete");
-        if(isDelete) {
-          
-            alert("yet to implement code") 
-          }
-        }
+  onDelete(id: number) {
+    const isDelete = confirm("Are you sure want ot Delete");
+    if(isDelete) {
+      this.masterSrv.deleteProjectEmpMapById(id).subscribe((res: IApiResponse) => {
+        this.getAllData();
+        this.chageDetection.detectChanges();
+        alert("Employee Deleted");
+        
+      }, error => {
+        alert('API Error');
+      });
+    }
+  }
   
-  onUpdate(empProjectId:number){
+/*  onUpdate(empProjectId:number){
     alert("yet to implement code") 
+  }*/
+    onCancel() {
+      this.isEditMode = false; // Reset edit mode
+      this.form.reset(); // Clear the form
+    }
+
+  onUpdate(item: IProjectEmployee) {
+    this.isEditMode = true; // Set edit mode to true
+    this.form.patchValue({
+      empProjectId: item.empProjectId,
+      projectId: item.projectId,
+      empId: item.empId,
+      assignedDate: item.assignedDate,
+      role: item.role,
+      isActive: item.isActive,
+    });
   }
   getAllData() {
     this.masterSrv.getProjectEmp().subscribe((Res: IProjectEmployee[]) => {
@@ -66,6 +88,7 @@ export class ProjectEmployeeComponent implements OnInit {
       debugger;
       alert("Employee Added to Project Created") 
       this.getAllData();
+      this.isEditMode = false;
      this.form.reset();
     },error=>{
       alert('API Error')

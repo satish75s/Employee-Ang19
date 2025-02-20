@@ -7,6 +7,7 @@ import { ProjectComponent } from './pages/project/project.component';
 import { ProjectEmployeeComponent } from './pages/project-employee/project-employee.component';
 import { ProjectFormComponent } from './pages/project-form/project-form.component';
 import { authGuard } from './guard/auth.guard';
+import { RegistrationComponent } from './pages/registration/registration.component';
 
 
 export const routes: Routes = [
@@ -20,6 +21,7 @@ export const routes: Routes = [
         path:'login',
         component:LoginComponent
     },
+    
     {
         path:'',
         component:LayoutComponent,
@@ -48,6 +50,11 @@ export const routes: Routes = [
             {
                 path:'project-employee',
                 component:ProjectEmployeeComponent,
+                canActivate:[authGuard]
+            },
+            {
+                path:'registration',
+                component:RegistrationComponent,
                 canActivate:[authGuard]
             }
         ]
